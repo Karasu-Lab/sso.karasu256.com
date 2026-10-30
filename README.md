@@ -7,3 +7,7 @@ The sign-in page asks for a work email address and hands the user to the identit
 It has no database of its own. SSO provider registrations are stored by api-auth in the shared `sso_provider` table. Users whose organization does not use SSO sign in on auth.karasu256.com instead, and account management (`/settings`) stays in accounts.karasu256.com.
 
 Run commands from the repository root, e.g. `pnpm --filter sso.karasu256.com dev` (port 3007).
+
+## Deployment
+
+Deployed as a Cloudflare Worker by `.github/workflows/sso-deploy.yml`, a thin wrapper around the shared [`deploy-worker`](https://github.com/Karasu-Lab/Workers) action (`Karasu-Lab/Workers/deploy-worker@v1`): pushes to `main` deploy production, other branches deploy a per-branch Preview (only the newest five Previews are kept). No custom domain is attached yet; the worker serves on its workers.dev subdomain. The workflow reads `CLOUDFLARE_API_TOKEN` (secret) and `CLOUDFLARE_ACCOUNT_ID` (variable) from the `production` / `preview` GitHub Environments.
