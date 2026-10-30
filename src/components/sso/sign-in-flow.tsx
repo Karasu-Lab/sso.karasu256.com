@@ -293,6 +293,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
               </div>
             </div>
           ) : (
+            <>
             <SlideSteps index={formStepIndex}>
               <SlideStep aria-hidden={step !== 'email'}>
                 <form onSubmit={handleEmailSubmit}>
@@ -435,6 +436,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
                 className="mt-6"
               />
             )}
+            </>
           )}
         </div>
       </div>
