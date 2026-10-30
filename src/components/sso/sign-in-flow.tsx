@@ -315,7 +315,17 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
                     />
                     {emailError && <p className="text-sm text-destructive">{emailError}</p>}
                   </div>
-                  <div className="mt-8 flex justify-end pr-1 pb-1">
+                  {turnstileSiteKey && (
+                    <div className="mt-8 flex justify-center">
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={turnstileSiteKey}
+                        action="sign-in"
+                        onTokenChange={setTurnstileToken}
+                      />
+                    </div>
+                  )}
+                  <div className="mt-6 flex justify-end pr-1 pb-1">
                     <Button type="submit" disabled={busy || !email || step !== 'email' || turnstilePending}>
                       {t('signIn.next')}
                     </Button>
@@ -426,16 +436,6 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
                 </form>
               </SlideStep>
             </SlideSteps>
-
-            {turnstileSiteKey && (
-              <Turnstile
-                ref={turnstileRef}
-                siteKey={turnstileSiteKey}
-                action="sign-in"
-                onTokenChange={setTurnstileToken}
-                className="mt-6"
-              />
-            )}
             </>
           )}
         </div>
