@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Fingerprint, KeyRound, LoaderCircle, LockKeyhole, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Button, Input, Label, SlideStep, SlideSteps, UserAvatar, toast } from '@karasu-lab/ui';
-import { authClient } from '@/lib/auth/client';
+import { Button, Input, Label, SlideStep, SlideSteps, Turnstile, UserAvatar, toast, type TurnstileHandle } from '@karasu-lab/ui';
+import { authClient, sdk } from '@/lib/auth/client';
 import { lookupSignIn, type SignInLookup } from '@/lib/sign-in-lookup';
 import { SamlConnectionInfoDialog } from './saml-connection-info';
 
@@ -64,6 +64,15 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
   const [passkeyError, setPasskeyError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  // Bot verification for the credential submissions. The widget mints a
+  // single-use token the gated calls carry; while a site key is
+  // configured, those submissions wait for a token, and the widget is
+  // reset after every attempt because a redeemed token cannot be reused.
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  const turnstilePending = Boolean(turnstileSiteKey) && !turnstileToken;
+
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -92,7 +101,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
   // the browser superseding this request with a modal ceremony — is
   // expected and stays silent.
   useEffect(() => {
-    if (step !== 'email') return;
+    if (step !== 'email' || turnstilePending) return;
     let cancelled = false;
     void (async () => {
       const credentialApi = window.PublicKeyCredential as
@@ -106,15 +115,15 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     return () => {
       cancelled = true;
     };
-  }, [step, continueTo]);
+  }, [step, continueTo, turnstilePending]);
 
   async function selectAccount(entry: DeviceSessionEntry) {
     setBusy(true);
     const { error } = await authClient.multiSession.setActive({ sessionToken: entry.session.token });
     if (error) {
+      // A failed switch does not change who is signed in on this
+      // device, so the chooser list is not refetched.
       toast.error(t('signIn.error.unknown'));
-      const { data } = await authClient.multiSession.listDeviceSessions();
-      setSessions((data ?? []) as DeviceSessionEntry[]);
       setBusy(false);
       return;
     }
@@ -141,7 +150,11 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
       } else {
         setLookup(result.lookup);
         if (result.lookup.sso) {
-          const { data, error } = await authClient.signIn.sso({ email, callbackURL: continueTo });
+          const { data, error } = await authClient.signIn.sso(
+            { email, callbackURL: continueTo },
+            turnstileToken ? { headers: { 'cf-turnstile-response': turnstileToken } } : undefined,
+          );
+          turnstileRef.current?.reset();
           const url = (data as { url?: string } | null)?.url;
           if (!error && url) {
             window.location.replace(url);
@@ -177,7 +190,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     }
     // The passkey ceremony is discoverable-credential based, so confirm
     // it signed in the account whose email address was entered.
-    const { data: session } = await authClient.getSession();
+    const session = await sdk.getSession();
     if (session && session.user.email.toLowerCase() !== email.trim().toLowerCase()) {
       await authClient.signOut();
       setPasskeyError(t('signIn.error.passkeyMismatch'));
@@ -191,8 +204,12 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     e.preventDefault();
     setBusy(true);
     setPasswordError(null);
-    const { data, error } = await authClient.signIn.email({ email, password, callbackURL: continueTo });
+    const { data, error } = await authClient.signIn.email(
+      { email, password, callbackURL: continueTo },
+      turnstileToken ? { headers: { 'cf-turnstile-response': turnstileToken } } : undefined,
+    );
     if (error) {
+      turnstileRef.current?.reset();
       setPasswordError(error.status === 401 ? t('signIn.error.invalidPassword') : t('signIn.error.unknown'));
       setBusy(false);
       return;
@@ -276,6 +293,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
               </div>
             </div>
           ) : (
+            <>
             <SlideSteps index={formStepIndex}>
               <SlideStep aria-hidden={step !== 'email'}>
                 <form onSubmit={handleEmailSubmit}>
@@ -298,7 +316,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
                     {emailError && <p className="text-sm text-destructive">{emailError}</p>}
                   </div>
                   <div className="mt-8 flex justify-end pr-1 pb-1">
-                    <Button type="submit" disabled={busy || !email || step !== 'email'}>
+                    <Button type="submit" disabled={busy || !email || step !== 'email' || turnstilePending}>
                       {t('signIn.next')}
                     </Button>
                   </div>
@@ -401,13 +419,24 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
                     {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
                   </div>
                   <div className="mt-8 flex justify-end pr-1 pb-1">
-                    <Button type="submit" disabled={busy || !password || step !== 'password'}>
+                    <Button type="submit" disabled={busy || !password || step !== 'password' || turnstilePending}>
                       {t('signIn.login')}
                     </Button>
                   </div>
                 </form>
               </SlideStep>
             </SlideSteps>
+
+            {turnstileSiteKey && (
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={turnstileSiteKey}
+                action="sign-in"
+                onTokenChange={setTurnstileToken}
+                className="mt-6"
+              />
+            )}
+            </>
           )}
         </div>
       </div>
