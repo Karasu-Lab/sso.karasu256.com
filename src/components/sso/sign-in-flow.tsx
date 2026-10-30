@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Fingerprint, KeyRound, LoaderCircle, LockKeyhole, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button, Input, Label, SlideStep, SlideSteps, Turnstile, UserAvatar, toast, type TurnstileHandle } from '@karasu-lab/ui';
-import { authClient } from '@/lib/auth/client';
+import { authClient, sdk } from '@/lib/auth/client';
 import { lookupSignIn, type SignInLookup } from '@/lib/sign-in-lookup';
 import { SamlConnectionInfoDialog } from './saml-connection-info';
 
@@ -101,7 +101,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
   // the browser superseding this request with a modal ceremony — is
   // expected and stays silent.
   useEffect(() => {
-    if (step !== 'email') return;
+    if (step !== 'email' || turnstilePending) return;
     let cancelled = false;
     void (async () => {
       const credentialApi = window.PublicKeyCredential as
@@ -115,15 +115,15 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     return () => {
       cancelled = true;
     };
-  }, [step, continueTo]);
+  }, [step, continueTo, turnstilePending]);
 
   async function selectAccount(entry: DeviceSessionEntry) {
     setBusy(true);
     const { error } = await authClient.multiSession.setActive({ sessionToken: entry.session.token });
     if (error) {
+      // A failed switch does not change who is signed in on this
+      // device, so the chooser list is not refetched.
       toast.error(t('signIn.error.unknown'));
-      const { data } = await authClient.multiSession.listDeviceSessions();
-      setSessions((data ?? []) as DeviceSessionEntry[]);
       setBusy(false);
       return;
     }
@@ -190,7 +190,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     }
     // The passkey ceremony is discoverable-credential based, so confirm
     // it signed in the account whose email address was entered.
-    const { data: session } = await authClient.getSession();
+    const session = await sdk.getSession();
     if (session && session.user.email.toLowerCase() !== email.trim().toLowerCase()) {
       await authClient.signOut();
       setPasskeyError(t('signIn.error.passkeyMismatch'));
