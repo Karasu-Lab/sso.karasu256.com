@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, Fingerprint, KeyRound, LoaderCircle, LockKeyhole, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Button, Input, Label, SlideStep, SlideSteps, UserAvatar, toast } from '@Hashibutogarasu/ui';
+import { Button, Input, Label, SlideStep, SlideSteps, UserAvatar, toast } from '@karasu-lab/ui';
 import { authClient } from '@/lib/auth/client';
 import { lookupSignIn, type SignInLookup } from '@/lib/sign-in-lookup';
 import { SamlConnectionInfoDialog } from './saml-connection-info';

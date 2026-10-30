@@ -5,7 +5,7 @@ import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import { Button, Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogTitle, toast } from '@Hashibutogarasu/ui';
+import { Button, Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogTitle, toast } from '@karasu-lab/ui';
 import { getSamlConnectionInfo } from '@/lib/saml';
 
 interface ConnectionFieldProps {
