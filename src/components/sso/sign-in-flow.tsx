@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Fingerprint, KeyRound, LoaderCircle, LockKeyhole, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button, Input, Label, SlideStep, SlideSteps, Turnstile, UserAvatar, toast, type TurnstileHandle } from '@karasu-lab/ui';
-import { authClient, sdk } from '@/lib/auth/client';
+import { useSdk } from '@/lib/auth/client';
 import { lookupSignIn, type SignInLookup } from '@/lib/sign-in-lookup';
 import { SamlConnectionInfoDialog } from './saml-connection-info';
 
@@ -52,6 +52,8 @@ function ProgressBar({ active }: { active: boolean }) {
  * in this component's props for the whole flow, so no step loses it.
  */
 export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
+  const { sdk, config } = useSdk();
+  const { authClient } = sdk;
   const t = useTranslations();
   const [sessions, setSessions] = useState<DeviceSessionEntry[] | null>(null);
   const [step, setStep] = useState<Step>('email');
@@ -68,7 +70,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
   // single-use token the gated calls carry; while a site key is
   // configured, those submissions wait for a token, and the widget is
   // reset after every attempt because a redeemed token cannot be reused.
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const turnstileSiteKey = config.turnstileSiteKey;
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileRef = useRef<TurnstileHandle>(null);
   const turnstilePending = Boolean(turnstileSiteKey) && !turnstileToken;
@@ -138,7 +140,7 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
     setPasswordError(null);
     setPassword('');
     try {
-      const result = await lookupSignIn(email);
+      const result = await lookupSignIn(sdk.hosts.authApiUrl, email);
       if (result.status === 'rate_limited') {
         setEmailError(
           result.retryAfterExact

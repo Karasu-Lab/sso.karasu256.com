@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { Button, Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogTitle, toast } from '@karasu-lab/ui';
 import { getSamlConnectionInfo } from '@/lib/saml';
+import { useSdk } from '@/lib/auth/client';
 
 interface ConnectionFieldProps {
   label: string;
@@ -58,8 +59,9 @@ export interface SamlConnectionInfoDialogProps {
  */
 export function SamlConnectionInfoDialog({ placement }: SamlConnectionInfoDialogProps) {
   const t = useTranslations();
+  const { sdk } = useSdk();
   const [open, setOpen] = useState(false);
-  const info = getSamlConnectionInfo(process.env.NEXT_PUBLIC_AUTH_API_URL ?? '');
+  const info = getSamlConnectionInfo(sdk.hosts.authApiUrl);
 
   const triggerClassName =
     placement === 'page'
