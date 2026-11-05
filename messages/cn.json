@@ -19,7 +19,6 @@
       "title": "选择账号"
     },
     "email": "邮箱地址",
-    "emailDescription": "请输入邮箱地址。如果该域名已配置 SSO,将跳转到所属组织的身份提供商 (IdP)。",
     "error": {
       "accountNotFound": "未找到使用此邮箱地址的账号",
       "invalidPassword": "密码不正确。请重试",
