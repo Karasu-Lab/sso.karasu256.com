@@ -300,7 +300,6 @@ export function SignInFlow({ continueTo, errorCode }: SignInFlowProps) {
               <SlideStep aria-hidden={step !== 'email'}>
                 <form onSubmit={handleEmailSubmit}>
                   <h1 className="text-lg font-semibold">{t('signIn.title')}</h1>
-                  <p className="mt-1 text-sm text-muted-foreground">{t('signIn.emailDescription')}</p>
                   <div className="mt-6 space-y-2">
                     <Label htmlFor="sign-in-email">{t('signIn.email')}</Label>
                     <Input

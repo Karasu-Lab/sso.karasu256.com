@@ -19,7 +19,6 @@
       "title": "Choose an account"
     },
     "email": "Email address",
-    "emailDescription": "Enter your email address. If SSO is configured for its domain, you will be taken to your organization's identity provider (IdP).",
     "error": {
       "accountNotFound": "No account was found for this email address",
       "invalidPassword": "The password is incorrect. Please try again",
