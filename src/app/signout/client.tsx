@@ -7,7 +7,6 @@ import { LoadingView } from '@karasu-lab/ui';
 import { useSdk } from '@/lib/auth/client';
 import { resolveRedirectTo } from '@/lib/redirect';
 
-/** Clears the better-auth session, then navigates to the validated `?next` URL. */
 export function SignOutClient() {
   const {
     sdk: { authClient },

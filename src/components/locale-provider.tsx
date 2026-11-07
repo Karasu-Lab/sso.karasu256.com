@@ -13,11 +13,6 @@ const messagesByLocale: Record<Locale, typeof jaMessages> = {
   cn: cnMessages,
 };
 
-/**
- * Supplies the intl messages on the client: pages are served as static
- * assets in the default locale, and this provider switches to the
- * locale named by the NEXT_LOCALE cookie once it runs in the browser.
- */
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
 

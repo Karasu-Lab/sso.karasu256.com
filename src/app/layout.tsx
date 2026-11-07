@@ -34,7 +34,6 @@ export const metadata: Metadata = {
   },
 };
 
-/** Root layout — applies Geist fonts and full-height flex column. */
 export default function RootLayout({
   children,
 }: Readonly<{

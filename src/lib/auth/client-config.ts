@@ -65,13 +65,6 @@ function clientConfigSchema(defaults: ClientConfigDefaults) {
 
 export type ClientConfig = z.infer<ReturnType<typeof clientConfigSchema>>;
 
-/**
- * The client configuration as a single zod schema: every value the
- * browser needs, with a default per environment (selected by APP_ENV)
- * that the deployment's plain environment variables override. The
- * server resolves it in the client-config route and hands the result
- * to the browser, so no public build-time copy exists.
- */
 export function getClientConfig(): ClientConfig {
   const defaults = process.env.APP_ENV === 'local' ? LOCAL_DEFAULTS : process.env.APP_ENV === 'preview' ? PREVIEW_DEFAULTS : PRODUCTION_DEFAULTS;
 

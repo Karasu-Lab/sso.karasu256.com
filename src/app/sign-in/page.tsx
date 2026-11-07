@@ -8,7 +8,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('signIn.title') };
 }
 
-/** SSO sign-in page: the SSO counterpart of auth.karasu256.com's sign-in page; the SAML connection information lives behind the info button in the top-right corner. */
 export default function SignInPage() {
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center gap-6 p-4">
