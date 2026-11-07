@@ -10,6 +10,7 @@
     "siteTitle": "Karasu Lab"
   },
   "settings": {
+    "loading": "加载中",
     "signingOut": "正在退出登录"
   },
   "signIn": {
