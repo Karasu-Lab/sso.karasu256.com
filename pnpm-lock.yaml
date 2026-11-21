@@ -199,8 +199,8 @@ importers:
         specifier: 0.1.0-190fe8c
         version: 0.1.0-190fe8c(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@karasu-lab/sdk':
-        specifier: 0.1.0-0fdbfba
-        version: 0.1.0-0fdbfba(ed05c17549d79146956cdbc680babed1)
+        specifier: 0.1.0-57ce3cf
+        version: 0.1.0-57ce3cf(ed05c17549d79146956cdbc680babed1)
       '@karasu-lab/types':
         specifier: 0.1.0-1950a9c
         version: 0.1.0-1950a9c
@@ -1455,8 +1455,8 @@ packages:
       next: ^15.3.9
       react: ^19
 
-  '@karasu-lab/sdk@0.1.0-0fdbfba':
-    resolution: {integrity: sha512-kNa+g9SbFI9IqOxBH2ZQQk433y95ly3MB1iw3g+iRsksUKl7hh71PYKMgYWMajNyRWFaPvVrEYD2z0ZLRz950Q==, tarball: https://npm.pkg.github.com/download/@karasu-lab/sdk/0.1.0-0fdbfba/d6ba80f1803f747f09588733bcbc35466edc7b7f}
+  '@karasu-lab/sdk@0.1.0-57ce3cf':
+    resolution: {integrity: sha512-zqG8eM+CKsFmInCh3Yw6gvBymZ54wIV3nvMiOTm9W1PQ++BkggfH5rcQJQWZnUNkf/MTeXcAhWlG7uEtm5QlCQ==, tarball: https://npm.pkg.github.com/download/@karasu-lab/sdk/0.1.0-57ce3cf/b371b3a829b65d38438773f5cd7bfef03a5064ae}
     peerDependencies:
       '@better-auth/oauth-provider': ^1.7.12
       '@better-auth/passkey': ^1.7.12
@@ -5626,14 +5626,13 @@ snapshots:
       - '@opentelemetry/api'
       - react-dom
 
-  '@karasu-lab/sdk@0.1.0-0fdbfba(ed05c17549d79146956cdbc680babed1)':
+  '@karasu-lab/sdk@0.1.0-57ce3cf(ed05c17549d79146956cdbc680babed1)':
     dependencies:
       '@better-auth/oauth-provider': 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.2.14)(kysely@0.29.7)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(better-call@1.4.4(zod@4.6.7))
       '@better-auth/passkey': 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.2.14)(kysely@0.29.7)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(better-call@1.4.4(zod@4.6.7))(nanostores@1.5.5)
       '@better-auth/sso': 1.7.14(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.2.14)(kysely@0.29.7)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-auth@1.7.14(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(better-call@1.4.4(zod@4.6.7))
       '@karasu-lab/utils': 0.1.0-de578b8(@better-auth/core@1.7.14(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(better-call@1.4.4(zod@4.6.7))(jose@6.2.14)(kysely@0.29.7)(nanostores@1.5.5))(@better-auth/utils@0.5.1)(@better-fetch/fetch@1.3.3)(@karasu-lab/api-permissions@0.1.0-4efb331)(better-call@1.4.4(zod@4.6.7))(nanostores@1.5.5)(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       better-auth: 1.7.14(next@16.2.9(@babel/core@7.29.7(supports-color@10.2.2))(@playwright/test@1.64.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      jose: 6.2.14
       zod: 4.6.7
     transitivePeerDependencies:
       - '@better-auth/core'
