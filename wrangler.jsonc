@@ -15,7 +15,7 @@
         "APP_URL": "https://dev.karasu256.com",
         "AUTH_API_URL": "https://dev-api-auth.karasu256.com",
         "AUTH_URL": "https://dev-auth.karasu256.com",
-        "TRUSTED_ORIGINS": "https://dev-accounts.karasu256.com,https://dev-auth.karasu256.com,https://dev-sso.karasu256.com,https://dev.karasu256.com,https://dev-qr.karasu256.com",
+        "TRUSTED_ORIGINS": "https://dev-accounts.karasu256.com,https://*.dev-accounts.karasu256.com,https://dev-auth.karasu256.com,https://dev-sso.karasu256.com,https://dev.karasu256.com,https://dev-qr.karasu256.com",
         "TURNSTILE_SITE_KEY": "0x4AAAAAAFsX0TpFOyokXFPm"
       }
     }
@@ -36,7 +36,7 @@
       "APP_URL": "https://dev.karasu256.com",
       "AUTH_API_URL": "https://dev-api-auth.karasu256.com",
       "AUTH_URL": "https://dev-auth.karasu256.com",
-      "TRUSTED_ORIGINS": "https://dev-accounts.karasu256.com,https://dev-auth.karasu256.com,https://dev-sso.karasu256.com,https://dev.karasu256.com,https://dev-qr.karasu256.com",
+      "TRUSTED_ORIGINS": "https://dev-accounts.karasu256.com,https://*.dev-accounts.karasu256.com,https://dev-auth.karasu256.com,https://dev-sso.karasu256.com,https://dev.karasu256.com,https://dev-qr.karasu256.com",
       "TURNSTILE_SITE_KEY": "0x4AAAAAAFsX0TpFOyokXFPm"
     }
   }
