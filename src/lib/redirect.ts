@@ -7,7 +7,7 @@ export function getDefaultRedirectTo(config: ClientConfig): string {
 }
 
 export function getRedirectTo(raw: string | null | undefined, config: ClientConfig): string {
-  return resolveRedirectTo(raw, config.trustedOrigins, getDefaultRedirectTo(config));
+  return resolveRedirectTo(raw, config.appEnv === 'preview' ? null : config.trustedOrigins, getDefaultRedirectTo(config));
 }
 
 export function getContinueTo(searchParams: URLSearchParams, config: ClientConfig): string {
@@ -21,7 +21,16 @@ export function getContinueTo(searchParams: URLSearchParams, config: ClientConfi
   return getRedirectTo(searchParams.get('next'), config);
 }
 
-export function resolveRedirectTo(raw: string | null | undefined, trustedOrigins: readonly string[], fallback: string): string {
+function matchesOriginPattern(origin: string, pattern: string): boolean {
+  if (!pattern.includes('*')) return origin === pattern;
+  const source = pattern
+    .split('*')
+    .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))
+    .join('[^/]*');
+  return new RegExp(`^${source}$`).test(origin);
+}
+
+export function resolveRedirectTo(raw: string | null | undefined, trustedOrigins: readonly string[] | null, fallback: string): string {
   if (!raw) return fallback;
 
   if (raw.startsWith('/') && !raw.startsWith('//') && !raw.startsWith('/\\')) return raw;
@@ -34,6 +43,6 @@ export function resolveRedirectTo(raw: string | null | undefined, trustedOrigins
   }
 
   if (url.protocol !== 'https:' && url.protocol !== 'http:') return fallback;
-  if (!trustedOrigins.includes(url.origin)) return fallback;
+  if (trustedOrigins && !trustedOrigins.some((pattern) => matchesOriginPattern(url.origin, pattern))) return fallback;
   return url.toString();
 }
