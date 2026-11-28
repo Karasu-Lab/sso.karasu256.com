@@ -3,7 +3,8 @@ import type { ClientConfig } from '@/lib/auth/client-config';
 const OAUTH_SIGNATURE_PARAMS = ['sig', 'exp', 'prompt'];
 
 export function getDefaultRedirectTo(config: ClientConfig): string {
-  return `${config.accountsUrl}/settings`;
+  if (config.accountsUrl) return `${config.accountsUrl}/settings`;
+  return config.appUrl ?? '/';
 }
 
 export function getRedirectTo(raw: string | null | undefined, config: ClientConfig): string {
