@@ -3,8 +3,8 @@ import { z } from 'zod';
 const clientConfigEnvSchema = z.object({
   AUTH_API_URL: z.url(),
   AUTH_URL: z.url().optional(),
-  ACCOUNTS_URL: z.url(),
-  APP_URL: z.url(),
+  ACCOUNTS_URL: z.url().optional(),
+  APP_URL: z.url().optional(),
   APP_ENV: z.string().optional(),
   TURNSTILE_SITE_KEY: z.string().optional(),
   TRUSTED_ORIGINS: z
@@ -22,8 +22,8 @@ const clientConfigEnvSchema = z.object({
 export interface ClientConfig {
   authApiUrl: string;
   authUrl?: string;
-  accountsUrl: string;
-  appUrl: string;
+  accountsUrl?: string;
+  appUrl?: string;
   appEnv?: string;
   turnstileSiteKey: string;
   trustedOrigins: string[];
@@ -31,7 +31,6 @@ export interface ClientConfig {
 
 export function getClientConfig(): ClientConfig {
   const env = clientConfigEnvSchema.parse(process.env);
-  if (env.APP_ENV !== 'preview' && env.TRUSTED_ORIGINS.length === 0) throw new Error('TRUSTED_ORIGINS is not set');
   return {
     appEnv: env.APP_ENV,
     authApiUrl: env.AUTH_API_URL,
